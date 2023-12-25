@@ -31,7 +31,7 @@ He aquí un resumen visual de las calificaciones obtenidas en cada tarea:
 Para utilizar estos archivos, simplemente clona el repositorio y abre los archivos `.R` o `.Rmd` en tu entorno R.
 
 ```bash
-git clone url-del-repositorio
+git clone https://github.com/ByronCaices/Estadistica-Computacional
 ```
 
 ## 📝 Notas Adicionales
