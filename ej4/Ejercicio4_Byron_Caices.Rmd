@@ -1,0 +1,162 @@
+---
+title: "Ejercicio 4 - Estadística Computacional"
+author: "Byron Caices Lima"
+date: "2023-10-25"
+output:
+  html_document:
+    highlight: tango
+  word_document: default
+  pdf_document: default
+runtime: shiny
+---
+
+<style>
+body {
+  font-family: 'Calibri', sans-serif;
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+---
+
+````{r}
+library(shiny)
+library(ggplot2)
+library("readxl")
+````
+
+
+### **Descripcion del Data-set**
+
+El conjunto de datos "Online Retail" es un dataset que contiene todas las transacciones ocurridas entre el 01/12/2010 y el 09/12/2011 de una tienda en línea registrada en Europa. El dataset consta de 6 características que incluyen información sobre las facturas, los códigos de stock, descripciones de productos, cantidades, fechas de facturación, precios unitarios, IDs de cliente y países de residencia de los clientes.
+
+#### **Variables seleccionadas**
+
+1. **Cuantitativa:** `UnitPrice` corresponde al precio del producto vendido por la empresa, es una variable aleatoria continua.
+
+2. **Cualitativa:** `Country` corresponde al país donde se vendió el producto, es una variable aleatoria discreta.
+
+---
+
+````{r}
+ui <- fluidPage(
+
+  titlePanel("Visualización de Datos"),
+  
+  mainPanel(
+    # Movido aquí para aparecer antes del gráfico
+    radioButtons("opcion", "Selecciona una gráfica:",
+                 c("Distribución de precios unitarios" = "UnitPrice",
+                   "Frecuencia de registros por país" = "Country")),
+    
+    plotOutput("grafica"),
+    tableOutput("summary"),       # Para mostrar el resumen de países
+    verbatimTextOutput("mediaPrecio"),    # Para mostrar la media
+    verbatimTextOutput("desviacionPrecio"),  # Para mostrar la desviación estándar
+    verbatimTextOutput("medianaPrecio"),  # Añadido para mostrar la mediana
+    verbatimTextOutput("infoText")
+  )
+)
+
+
+````
+
+````{r}
+server <- function(input, output) {
+  # Cargamos los datos
+  datos <- read_excel("G:/Other computers/My Laptop/University/NIVEL 5/Estadistica Computacional/R-ESTCOMP-2023/ej4/Online_Retail3.xlsx")
+  
+  # Renderizamos la gráfica
+  output$grafica <- renderPlot({
+    if (input$opcion == "UnitPrice") {
+      ggplot(datos, aes(x=UnitPrice)) +
+        geom_histogram(binwidth=2, fill="#69b3a2", color="black", alpha=0.7) +
+        labs(title="Distribución de precios unitarios", x="Precios", y="Frecuencia") +
+        theme_minimal()
+    } else if (input$opcion == "Country") {
+      ggplot(datos, aes(x=Country)) +
+        geom_bar() +
+        labs(title = "Frecuencia de compras por país", x = "País", y = "Frecuencia") +
+        theme_minimal()
+    }
+  })
+  
+
+  # Renderizamos el resumen de países
+  output$summary <- renderTable({
+    if (input$opcion == "Country") {
+      table(datos$Country)
+    } else {
+      NULL
+    }
+  })
+
+  # Renderizamos la media de precios unitarios
+  output$mediaPrecio <- renderText({
+    if (input$opcion == "UnitPrice") {
+      paste("Media de Precios Unitarios:", round(mean(datos$UnitPrice, na.rm=TRUE), 2))
+    } else {
+      NULL
+    }
+  })
+
+  # Renderizamos la desviación estándar de precios unitarios
+  output$desviacionPrecio <- renderText({
+    if (input$opcion == "UnitPrice") {
+      paste("Desviación Estándar de Precios Unitarios:", round(sd(datos$UnitPrice, na.rm=TRUE), 2))
+    } else {
+      NULL
+    }
+  })
+
+  # Renderizamos la mediana de precios unitarios
+  output$medianaPrecio <- renderText({
+    if (input$opcion == "UnitPrice") {
+      paste("Mediana de Precios Unitarios:", round(median(datos$UnitPrice, na.rm=TRUE), 2))
+    } else {
+      NULL
+    }
+  })
+  
+  output$infoText <- renderText({
+    if (input$opcion == "UnitPrice") {
+      rango <- max(datos$UnitPrice, na.rm = TRUE) - min(datos$UnitPrice, na.rm = TRUE)
+      paste("Rango de precios unitarios:", round(rango, 2))
+    } else if (input$opcion == "Country") {
+      moda <- names(sort(table(datos$Country), decreasing = TRUE)[1])
+      porcentaje <- (max(table(datos$Country)) / nrow(datos)) * 100
+      paste("País con más registros (moda):", moda, "con un porcentaje de", round(porcentaje, 2), "%")
+    }
+  })
+}
+
+shinyApp(ui = ui, server = server)
+
+````
+
+---
+
+## **Conclusiones**
+
+### **Para UnitPrice:**
+
+1. **Media = 5.14**: La media nos dice que el precio unitario promedio de todos los productos es de aproximadamente 5.14 unidades monetarias. Esto nos da una idea general del nivel de precios en el conjunto de datos, pero hay que tener en cuenta que la media puede estar influenciada por valores extremos.
+
+2. **Desviación Estándar = 5.27**: La desviación estándar es una medida de la dispersión de los datos. Un valor de 5.27 indica que los precios unitarios varían significativamente alrededor de la media. Esto podría significar que hay una gran variedad de productos con diferentes rangos de precios.
+
+3. **Mediana = 2.95**: La mediana nos da una idea del "precio medio" y es menos susceptible a valores extremos que la media. Un valor de 2.95 indica que la mitad de los productos tienen un precio unitario menor a este valor, lo cual es significativamente menor que la media. Esto sugiere que hay productos con precios unitarios muy altos que están elevando la media.
+
+4. **Rango = 42.95**: Este valor indica la diferencia entre el precio unitario más alto y el más bajo en el conjunto de datos. Un rango tan amplio podría indicar una amplia variedad de productos, desde muy económicos hasta muy caros.
+
+### **Para Country:**
+
+1. **Distribución de Registros por País**: Los países con más registros son Alemania y Francia, seguidos por Bélgica y Suiza. Dinamarca y Suecia tienen significativamente menos registros.
+
+2. **País con más registros (moda): "Germany" con un porcentaje de 40.25 %**: Alemania domina el conjunto de datos con aproximadamente el 40.25% de los registros. Esto podría indicar que Alemania es un mercado clave para la empresa o que los datos están sesgados hacia este país por alguna razón.
+
+---
+
+En resumen, para la variable `UnitPrice`, hay una amplia gama de precios y una significativa variabilidad. Para la variable `Country`, Alemania parece ser el mercado más importante en términos de número de registros, seguido por Francia.

@@ -1,0 +1,81 @@
+#### a) Cantidad de permutaciones con n = 9 y r = 4 con y sin repetición.
+
+```{r 4a, eval=TRUE}
+a_without_repetition = permutations(n = 9, r = 4)
+cat("a) Sin repetición:", nrow(a_without_repetition), "\n")
+
+
+a_with_repetition = 9^4
+cat("a) Con repetición:", a_with_repetition, "\n")
+```
+
+#### b) Combinaciones de largo 4 con las letras f, g, h, i y j con y sin repetición.
+
+```{r 4b, eval=TRUE}
+b_without_repetition = combn(c("f", "g", "h", "i", "j"), 4)
+cat("b) Sin repetición:\n")
+print(b_without_repetition)
+
+b_with_repetition = combinations(n = 5, r = 4, v = c("f", "g", "h", "i", "j"), repeats.allowed = TRUE)
+cat("b) Con repetición:\n")
+print(b_with_repetition)
+```
+
+#### c) Cantidad de permutaciones y combinaciones con n=30 y r=20 sin repetición.
+```{r 4c, eval=TRUE}
+c_permutations = permutations(n = 30, r = 20)
+cat("c) Permutaciones sin repetición:", nrow(c_permutations), "\n")
+
+c_combinations = combn(30, 20)
+cat("c) Combinaciones sin repetición:", ncol(c_combinations), "\n")
+```
+
+# d) Cantidad de permutaciones con n=7 y r=5 con y sin repetición.
+```{r 4d, eval=TRUE}
+d_without_repetition = permutations(n = 7, r = 5)
+cat("d) Sin repetición:", nrow(d_without_repetition), "\n")
+
+d_with_repetition = 7^5
+cat("d) Con repetición:", d_with_repetition, "\n")
+```
+
+#### e) Combinaciones de largo 2 con los números 1, 2, 3, 4 y 5 con y sin repetición.
+
+```{r 4e, eval=TRUE}
+e_without_repetition = combn(1:5, 2)
+cat("e) Sin repetición:\n")
+print(e_without_repetition)
+
+e_with_repetition = combinations(n = 5, r = 2, v = 1:5, repeats.allowed = TRUE)
+cat("e) Con repetición:\n")
+print(e_with_repetition)
+```
+
+#### f) Cantidad de permutaciones y combinaciones con n=50 y r=10 sin repetición.
+
+```{r 4f, eval=TRUE}
+f_permutations = permutations(n = 50, r = 10)
+cat("f) Permutaciones sin repetición:", nrow(f_permutations), "\n")
+
+f_combinations = combn(50, 10)
+cat("f) Combinaciones sin repetición:", ncol(f_combinations), "\n")
+```
+
+#### g) Cantidad de permutaciones circulares posibles con n=6.
+
+```{r 4g, eval=TRUE}
+g_circular = factorial(6 - 1)
+cat("g) Permutaciones circulares:", g_circular, "\n")
+```
+
+#### h) Combinaciones de largo 3 con las letras x, y, z, w y q con y sin repetición.
+
+```{r 4h, eval=TRUE}
+h_without_repetition = combn(c("x", "y", "z", "w", "q"), 3)
+cat("h) Sin repetición:\n")
+print(h_without_repetition)
+
+h_with_repetition = combinations(n = 5, r = 3, v = c("x", "y", "z", "w", "q"), repeats.allowed = TRUE)
+cat("h) Con repetición:\n")
+print(h_with_repetition)
+```

@@ -1,0 +1,187 @@
+---
+title: "Máxima Verosimilitud"
+author: "I. Elena Guzmán Madriaga"
+date: "2023-11-17"
+output: 
+  html_document:
+    theme: lumen  # Puedes cambiar a "lumen" u otro tema si prefieres
+    fig_width: 8  # Ancho predeterminado de las figuras
+    fig_height: 6  # Altura predeterminada de las figuras
+    highlight: tango  # Establecer el estilo de resaltado de código, puedes elegir otro estilo si prefieres
+---
+
+
+# Método de Máxima Verosimilitud
+
+# Paso 0 
+Crear los datos que se van a utilizar, para que puedab ver que sus resultados estén acertados
+se establece un lambda y se crea la distribución con eso
+
+```{r}
+# Settear seed 
+# Esto sirve para que se mantengan los mismos números al recargar el código
+set.seed(10)
+
+# Tamaño de la muestra N
+N = 2000
+
+# Definimos lambda = 10
+lambda = 5
+
+# Generacón de distribución exponencial utilizando el valor de lambda como el parámetro de tasa 
+# de la distribución exponencial.
+# En otras palabras es la frecuencia promedio de eventos por unidad de tiempo
+exponential_data = rexp(n=N, rate=lambda)
+
+```
+
+
+# Paso 1
+
+La función de verosimilitud para una muestra de \(N\) observaciones \(x_1, x_2, \ldots, x_N\) de una distribución exponencial con parámetro de tasa \(\lambda\) se define como:
+
+\[ \text{Likelihood}(\lambda) = \prod_{i=1}^{N} \lambda \exp(-\lambda x_i) \]
+
+# Paso 2
+
+El logaritmo natural de la función de verosimilitud (log-verosimilitud) se calcula como:
+
+\[ \text{log-Likelihood}(\lambda) = \sum_{i=1}^{N} \log(\lambda) - \lambda x_i \]
+
+```{r}
+# log likelihood
+exponencial_log = function(lambda, x=exponential_data, n=N){
+  return(-(n*log(lambda)-lambda*sum(x)))
+}
+```
+
+Veamos como queda
+```{r}
+exponencial_graph = function(lambda, x=exponential_data, n=N){
+  return(n*log(lambda)-lambda*sum(x))
+}
+# Se evalúa la log-verosimilitud para cada valor de λ en el rango de 0 a 30
+lambdas = seq(0,30) # secuencia de números
+plot(lambdas,
+     exponencial_graph(lambda=lambdas, x=exponential_data, n=N), 
+     main="Loglike Function con diversos lambdas", 
+     type='o', 
+     xlab='Valor lambda', 
+     ylab='Loglike evaluado')
+```
+
+
+# Paso 3
+Derivar la función
+
+\[
+\frac{d}{d\lambda} \text{log-Likelihood}(\lambda) = \sum_{i=1}^{N} \left( \frac{1}{\lambda} - x_i \right)
+\]
+
+# Paso 4
+
+Igualar a 0 lo obtenido
+
+\[\frac{n}{\lambda} - \sum_{i=1}^{N} x_i = 0
+\]
+
+Gracias a R, tenemos la función **optim** que hace el **paso 3 y el paso 4 juntos** 
+
+Utiliza un algoritmo de optimización numérica para encontrar el valor del parámetro que maximiza la función de verosimilitud. En el proceso de optimización, el algoritmo calculará la derivada de la función de verosimilitud con respecto al parámetro (el gradiente) y, si se especifica (hessian=TRUE), también calculará la matriz hessiana.
+
+* fn: La función que se va a optimizar, en este caso, exponencial_log.
+
+* par: La estimación inicial del parámetro, en este caso, c(1).
+
+* lower: El límite inferior para los parámetros.
+
+* upper: El límite superior para los parámetros.
+
+* hessian: Si se debe calcular o no el hessiano.
+
+* method: El método de optimización, en este caso, "L-BFGS-B".
+
+* n: El tamaño de la muestra.
+
+* x: La entrada X, en este caso, exponential_data.
+
+```{r}
+MLE_estimates <- optim(fn=exponencial_log,      
+                       par=c(1),                
+                       lower = c(-Inf, -Inf),   
+                       upper = c(Inf, Inf),                       
+                       hessian= TRUE,           
+                       method = "L-BFGS-B",     
+                       n = N,                    
+                       x = exponential_data)    
+
+MLE_par <- MLE_estimates$par
+cat("El valor original de lambda es", lambda, "y el estimador obtenido con máxima verosimilitud es", MLE_par)
+```
+
+# Otros ejemplos
+
+## 1
+
+```{r}
+# Datos de tiempo de fallo
+failure_time <- c(11.96, 5.03, 67.40, 16.07, 31.50, 7.73, 11.10, 22.38)
+
+# Función de verosimilitud negativa (para minimizar)
+negative_log_likelihood <- function(lambda) {
+  -sum(dexp(failure_time, rate = lambda, log = TRUE))
+}
+
+# Estimación de λ usando optimización
+result <- optim(par = 1, fn = negative_log_likelihood, method = "Brent", lower = 0, upper = 1)
+
+# Resultado
+lambda_hat <- result$par
+cat("Estimación de λ (MLE):", lambda_hat) # Aproximadamente 0.0462
+
+```
+En este caso, utilizamos la optimización para encontrar el valor de $\lambda$ que maximiza la función de verosimilitud (minimiza su negativo). La estimación resultante es aproximadamente $\hat{\lambda}$= 0.0462.
+
+## 2
+
+Sin usar optim
+
+
+```{r}
+# Datos de muestra 
+data <- c(1, 2, 3, 0, 1, 2, 1, 4, 2)
+
+# Función de log-verosimilitud para la distribución de Poisson
+log_likelihood <- function(lambda, data) {
+  n <- length(data)
+  log_likelihood <- sum(data * log(lambda) - lambda - log(factorial(data)))
+  return(-log_likelihood)  # Negativo para convertir a problema de minimización
+}
+
+# Gradiente de la función de log-verosimilitud
+gradient <- function(lambda, data) {
+  n <- length(data)
+  grad <- sum(data / lambda - 1)
+  return(-grad)  # Negativo para convertir a problema de minimización
+}
+
+# Descenso de gradiente para la maximización de la log-verosimilitud
+maximize_likelihood <- function(data, learning_rate = 0.01, iterations = 1000) {
+  lambda <- mean(data)  # Inicialización
+  for (i in 1:iterations) {
+    lambda <- lambda + learning_rate * gradient(lambda, data)
+  }
+  return(lambda)
+}
+
+# Estimar lambda
+estimated_lambda <- maximize_likelihood(data)
+
+# Imprimir resultado
+cat("Estimación de lambda:", estimated_lambda, "\n")
+
+```
+
+
+
+

@@ -1,0 +1,260 @@
+---
+title: "EJERCICIOS 01 - Estadistica Computacional"
+author: "Byron Caices"
+date: "2023-03-22"
+output: html_document
+---
+
+## DESAFIO 1: Operadores Matemáticos
+
+#### 1. Operador de Exponenciación
+
+```{exponenciacion}
+5 ^ 2   # Resultado: 25
+```
+
+#### 2. Módulo
+
+```{modulo}
+10 %% 3 # Resultado: 1
+```
+
+#### 3. División Entera
+
+```{div_int}
+7 %/% 3 # Resultado: 2
+```
+
+#### 4. Función Exponencial
+
+```{fun_exp}
+exp(2)  # Resultado: 7.389056
+```
+
+#### 5. Valor Absoluto
+
+```{Valor Absoluto}
+abs(-5) # Resultado: 5
+```
+
+#### 6. Factorial
+
+```{Factorial}
+factorial(5) # Resultado: 120
+```
+
+#### 7. Función Signo
+
+```{Funcion Signo}
+sign(-3.2) # Resultado: -1
+```
+
+#### 8. Función Techo
+
+```{Funcion Techo}
+ceiling(3.2) # Resultado: 4
+```
+
+#### 9. Función Piso
+
+```{Funcion Piso}
+floor(3.8) # Resultado: 3
+```
+
+#### 10. Función Redondeo Significativo
+
+```{Funcion Redondeo Significativo}
+signif(-5.678, 2) # Resultado: -5.7
+```
+
+## DESAFIO 2: Ejemplos con Estructuras de datos
+
+### Boolean
+
+```{booleanFalse}
+variable_booleana1 = 3 == 5 # Almacena FALSE
+```
+
+```{booleanTrue}
+variable_booleana2 = 3 < 5 # Almacena TRUE
+```
+
+### Factor
+
+Note: Podríamos utilizar un factor para representar una variable categórica como el nivel de educación de una persona, con niveles como básica, media o universidad.
+
+```{factor}
+niveles = c("bachiller","pregrado","postgrado") #Vector de niveles
+
+lista_datos = c("pregrado","pregrado","postgrado","bachiller","postgrado") #Vector de datos categóricos
+
+factor_niveles = factor(lista_datos, levels = niveles)
+
+print(factor_niveles)
+```
+
+```{salidafactor}
+[1] pregrado  pregrado  postgrado bachiller postgrado
+Levels: bachiller pregrado postgrado
+```
+
+Crear una lista de ventas por tienda y por día de la semana
+
+```{ejemplofactor}
+ventas <- list(
+  tienda1 = list(
+    lunes = c(100, 200, 150),
+    martes = c(80, 120, 90),
+    miercoles = c(150, 180, 200),
+    jueves = c(70, 120, 80),
+    viernes = c(120, 140, 160)
+  ),
+  tienda2 = list(
+    lunes = c(120, 150, 130),
+    martes = c(90, 80, 100),
+    miercoles = c(140, 160, 180),
+    jueves = c(100, 120, 140),
+    viernes = c(80, 90, 110)
+  ),
+  tienda3 = list(
+    lunes = c(80, 100, 120),
+    martes = c(70, 90, 110),
+    miercoles = c(120, 140, 160),
+    jueves = c(110, 130, 150),
+    viernes = c(90, 110, 130)
+  )
+)
+
+```
+
+```{ejemplomatrix1}
+
+# Obtener la lista de ventas de la tienda1
+ventas$tienda1
+
+# Obtener las ventas del martes en la tienda2
+ventas$tienda2$martes
+
+# Obtener el promedio de ventas de la tienda3 en cada día de la semana
+sapply(ventas$tienda3, mean)
+
+```
+
+```{ejemplomatrix2}
+# Agregar una nueva tienda a la lista de ventas
+ventas$tienda4 = list(
+  lunes = c(150, 200, 180),
+  martes = c(90, 100, 110),
+  miercoles = c(120, 130, 140),
+  jueves = c(80, 90, 100),
+  viernes = c(100, 110, 120)
+)
+
+```
+
+```{ejemplomatrix1}
+# Eliminar la tienda2 de la lista de ventas
+ventas$tienda2 = NULL
+```
+
+### Matrices
+
+```{ejemplomatrix2}
+# Crear una matriz vacía de 3 filas y 4 columnas
+matriz_vacia = matrix(nrow = 3, ncol = 4)
+```
+
+```{ejemplomatrix3}
+# Crear una matriz con datos predefinidos
+matriz_datos = matrix(c(1, 2, 3, 4, 5, 6), nrow = 2, ncol = 3)
+```
+
+```{ejemplomatrix4}
+# Acceder a un elemento específico de la matriz
+elemento = matriz_datos[1, 2]
+```
+
+```{ejemplomatrix5}
+# Modificar un elemento específico de la matriz
+matriz_datos[2, 3] = 10
+```
+
+```{ejemplomatrix6}
+# Calcular la suma de cada columna de la matriz
+suma_columnas = colSums(matriz_datos)
+```
+
+```{ejemplomatrix7}
+# Calcular la media de cada fila de la matriz
+media_filas = rowMeans(matriz_datos)
+```
+
+```{ejemplomatrix8}
+# Multiplicar dos matrices
+matriz1 = matrix(c(1, 2, 3, 4), nrow = 2, ncol = 2)
+matriz2 = matrix(c(5, 6, 7, 8), nrow = 2, ncol = 2)
+matriz_resultado = matriz1 %*% matriz2
+
+```
+
+## DESAFIO 3: Piedra, papel o tijeras
+
+```{juego}
+
+jugar_ppt = function(mano_jug) {
+  
+  opciones = c("piedra","papel","tijera")
+  computador = sample(opciones, 1)
+  
+  if (mano_jug == computador) {
+    
+    resultado = "Empate"
+    
+  } else if ((mano_jug == "piedra" & computador == "tijera") | 
+             (mano_jug == "papel" & computador == "piedra") | 
+             (mano_jug == "tijera" & computador == "papel")) {
+    resultado = "Ganaste"
+    
+  } else {
+    
+    resultado = "Perdiste"
+  }
+  out = paste("Jugador:",mano_jug,"\nV/S\nComp:",computador,"\n")
+  cat(out)
+  cat(resultado)
+  cat("!")
+}
+```
+
+```{ejemploppt}
+jugar_ppt("piedra") 
+# Con el supuesto de que computador elija "piedra"
+
+```
+
+```{salidappt}
+Jugador: papel 
+V/S
+Comp: papel 
+Empate!
+```
+
+## DESAFIO 4: Datasets de R - "Cars"
+
+El conjunto de datos se basa en la velocidad de los coches y las distancias necesarias para detenerse, con información que data de 1920 y puede ser útil para varias aplicaciones, como conocer la cantidad media de distancia requerida para detener un auto a cierta velocidad. La fuente de los datos proviene de McNeil, D. R. (1977) Interactive Data Analysis. Wiley.
+
+El dataset consta de dos variables: velocidad y distancia. La **velocidad** es una variable cuantitativa de ratio que puede tomar valores desde 0 hasta cierto intervalo de velocidad (dependiendo del automóvil), medida en mph. La **distancia** es también una variable cuantitativa de ratio, que se mide en pies (ft) y puede tomar valores desde 0 pies hasta cierto intervalo de distancia (dependiendo de las condiciones de la prueba de frenado).
+
+Además, se mencionan otras variables que podrían estar presentes en un dataset de autos, como la marca del automóvil, la transmisión del automóvil y si tiene aire acondicionado.
+
+Al ejecutar la función summary() para este dataset, se pueden observar diferentes tipos de datos importantes, como el mínimo y máximo de velocidad, el 1er y 3er cuartil de velocidad y distancia, la mediana y la media de la velocidad y la distancia, y el máximo registrado en las pruebas, que indica que a una velocidad de 25.0 se necesita una distancia de 120 pies (Frenado en pies (feet)).
+
+```{r carss}
+summary(cars)
+```
+
+Al utilizar la función plot(), se puede visualizar un diagrama de dispersión que muestra la relación entre la velocidad y la distancia de frenado de un automóvil en pies. Este gráfico de dispersión puede ayudar a identificar patrones o correlaciones en los datos y proporcionar información valiosa sobre el comportamiento de los vehículos a diferentes velocidades.
+
+```{r carsss}
+plot(cars)
+```

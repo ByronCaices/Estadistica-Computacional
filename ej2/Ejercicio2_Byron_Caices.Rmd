@@ -1,0 +1,405 @@
+---
+title: "EJERCICIO 02 - Estadistica Computacional"
+author: "Byron Caices Lima"
+date: "2023-10-05"
+output:
+  html_document:
+    highlight: tango
+  word_document: default
+  pdf_document: default
+---
+
+<style>
+body {
+  font-family: 'Calibri', sans-serif;
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---------------
+
+### **1. Instale los paquetes gtools y combinat con las sentencias:** 
+
+
+```{r libs, eval=TRUE}
+(library(gtools))
+(library(combinat))
+```
+
+---------------
+
+### **2. Defina los siguientes conceptos y proporcione las fórmulas para calcularlos:**
+
+
+---------------
+
+Tabla de definición:
+
+| Concepto                    | Toma Todos los Elementos | Orden Importante | Con Repetición |
+|-----------------------------|--------------------------|------------------|----------------|
+| Permutación sin Repetición  | No                       | Sí               | No             |
+| Combinación sin Repetición  | No                       | No               | No             |
+| Permutación Circular        | Sí                       | Sí               | No             |
+| Permutación con Repetición  | No                       | Sí               | Sí             |
+| Combinación con Repetición  | No                       | No               | Sí             |
+
+- Permutación sin Repetición
+
+\begin{equation}
+nPr = \dfrac{n!}{(n-r)!}
+\end{equation}
+
+Si n = r :
+\begin{equation}
+nPr = n!
+\end{equation}
+
+- Combinación sin Repetición
+
+\begin{equation}
+C(n,r) = \dfrac{n!}{r!(n-r)!}
+\end{equation}
+
+- Permutación Circular
+
+\begin{equation}
+PCn = (n-1)!
+\end{equation}
+
+- Permutación con Repetición
+
+\begin{equation}
+C(n,r) = {n^r}
+\end{equation}
+
+- Combinación con Repetición
+
+\begin{equation}
+C(n,r) = \dfrac{(n+r-1)!}{r!(n-1)!}
+\end{equation}
+
+---------------
+
+### **3. Busque en la ayuda de R las funciones combinations, permutations del paquete gtools y permn, combn del paquete combinat. Explique brevemente cómo funcionan y qué diferencias hay entre ellas.**
+
+
+#### **A. Definición de `combinations`**:
+La función `combinations` del paquete `gtools` en R genera todas las posibles combinaciones de `n` elementos tomados de `r` en `r`.
+
+
+**Parámetros de la función `COMBINATIONS`**:
+
+
+- `n`: Número total de elementos.
+- `r`: Número de elementos en cada combinación.
+- `v`: Un vector con los `n` elementos a combinar. Si no se especifica, la función asume que los elementos son los números enteros de 1 a `n`.
+- `repeats.allowed`: Un parámetro lógico. Si es `TRUE`, se permiten repeticiones en las combinaciones. Por defecto, es `FALSE`.
+
+
+**Ejemplo: Combinación S/R**:
+Obtener todas las posibles combinaciones de 3 letras tomadas de un conjunto de 4 letras ("A", "B", "C", "D"):
+
+
+```{r , eval=TRUE}
+library(gtools)
+result = combinations(n = 4, r = 3, v = c("A", "B", "C", "D"))
+print(result)
+```
+
+
+**Ejemplo: Combinación C/R**:
+
+
+```{r , eval=TRUE}
+result_with_repeats = combinations(n = 5, r = 2, v = c("A", "B", "C", "D", "E"), repeats.allowed = TRUE)
+print(result_with_repeats)
+```
+
+
+---------------
+
+
+#### **B. Definición de `PERMUTATIONS`**:
+La función `permutations` del paquete `gtools` en R genera todas las posibles permutaciones de `n` elementos tomados de `r` en `r`. A diferencia de las combinaciones, en las permutaciones el orden de los elementos es relevante.
+
+
+**Parámetros de la función `permutations`**:
+
+- `n`: Número total de elementos.
+- `r`: Número de elementos en cada permutación.
+- `v`: Un vector con los `n` elementos a permutar. Si no se especifica, la función asume que los elementos son los números enteros de 1 a `n`.
+- `repeats.allowed`: Un parámetro lógico. Si es `TRUE`, se permiten repeticiones en las permutaciones. Por defecto, es `FALSE`.
+
+
+**Ejemplo de uso**:
+Supongamos que deseas obtener todas las posibles permutaciones de 3 letras tomadas de un conjunto de 4 letras ("A", "B", "C", "D"):
+
+```{r , eval=TRUE}
+library(gtools)
+result = permutations(n = 4, r = 3, v = c("A", "B", "C", "D"))
+print(result)
+```
+
+
+Este código entrega una matriz con todas las permutaciones posibles de 3 letras tomadas de las 4 proporcionadas. Dado que el orden importa en las permutaciones, van a haber secuencias como "ABC", "ACB", "BCA", etc.
+
+----------------
+
+#### **C. Definición de `PERMN`**:
+
+La función `permn` del paquete `combinat` en R genera todas las posibles permutaciones de un conjunto dado. 
+
+**Parámetros de la función `permn`**:
+
+- `x`: Un vector de elementos que se desea permutar.
+
+**Ejemplo de uso**:
+Para obtener todas las permutaciones posibles del vector `c(1, 2, 3)`:
+
+   ```{r , eval=TRUE}
+   result = permn(c(1, 2, 3))
+   print(result)
+   ```
+
+----------------
+
+#### **D. Definición de `COMBN`**:
+La función `combn` genera todas las combinaciones posibles de un vector de elementos, tomados `m` a la vez.
+
+**Parámetros de la función `combn`**:
+
+- `x`: Un vector numérico o caracter de elementos que se desea combinar.
+- `m`: El número de elementos en cada combinación.
+
+**Ejemplo de uso**:
+Para obtener todas las combinaciones posibles de 2 elementos del vector `c(1, 2, 3)`:
+
+```{r , eval=TRUE}
+result = combn(c(1, 2, 3), 2)
+print(result)
+```
+
+Esto proporcionará una matriz donde cada columna representa una combinación única de 2 elementos tomados del vector `c(1, 2, 3)`. Específicamente, va a entregar las combinaciones `(1,2)`, `(1,3)` y `(2,3)`.
+
+------------------
+
+### **4. Calcule:**
+
+
+#### a) Cantidad de permutaciones con n = 9 y r = 4 con y sin repetición.
+
+```{r 4a, eval=TRUE}
+a_sin_rep = permutations(n = 9, r = 4)
+cat("a) Sin repetición:", nrow(a_sin_rep), "\n")
+
+
+a_con_rep = 9^4
+cat("a) Con repetición:", a_con_rep, "\n")
+```
+
+#### b) Combinaciones de largo 4 con las letras f, g, h, i y j con y sin repetición.
+
+```{r 4b, eval=TRUE}
+b_sin_rep = combn(c("f", "g", "h", "i", "j"), 4)
+cat("b) Sin repetición:\n")
+print(b_sin_rep)
+
+b_con_rep = combinations(n = 5, r = 4, v = c("f", "g", "h", "i", "j"), repeats.allowed = TRUE)
+cat("b) Con repetición:\n")
+print(b_con_rep)
+```
+
+#### c) Cantidad de permutaciones y combinaciones con n=30 y r=20 sin repetición.
+```{r 4c, eval=TRUE}
+n = 30
+r = 20
+
+c_permutations = factorial(n) / factorial(n-r)
+
+c_combinations = choose(n,r)
+
+cat("c) Permutación Sin repetición:", c_permutations, "\n")
+cat("c) Permutación Sin repetición:", c_combinations, "\n")
+```
+
+#### d) Cantidad de permutaciones con n=7 y r=5 con y sin repetición.
+```{r 4d, eval=TRUE}
+d_sin_rep = permutations(n = 7, r = 5)
+cat("d) Sin repetición:", nrow(d_sin_rep), "\n")
+
+d_con_rep = 7^5
+cat("d) Con repetición:", d_con_rep, "\n")
+```
+
+#### e) Combinaciones de largo 2 con los números 1, 2, 3, 4 y 5 con y sin repetición.
+
+```{r 4e, eval=TRUE}
+e_sin_rep = combn(1:5, 2)
+cat("e) Sin repetición:\n")
+print(e_sin_rep)
+
+e_con_rep = combinations(n = 5, r = 2, v = 1:5, repeats.allowed = TRUE)
+cat("e) Con repetición:\n")
+print(e_con_rep)
+```
+
+#### f) Cantidad de permutaciones y combinaciones con n=50 y r=10 sin repetición.
+
+```{r 4f, eval=TRUE}
+n = 50
+r = 10
+
+f_permutations = factorial(n) / factorial(n-r)
+
+f_combinations = choose(n,r)
+
+cat("f) Permutación Sin repetición:", c_permutations, "\n")
+cat("f) Permutación Sin repetición:", c_combinations, "\n")
+```
+
+#### g) Cantidad de permutaciones circulares posibles con n=6.
+
+```{r 4g, eval=TRUE}
+g_circular = factorial(6 - 1)
+cat("g) Permutaciones circulares:", g_circular, "\n")
+```
+
+#### h) Combinaciones de largo 3 con las letras x, y, z, w y q con y sin repetición.
+
+```{r 4h, eval=TRUE}
+h_sin_rep = combn(c("x", "y", "z", "w", "q"), 3)
+cat("h) Sin repetición:\n")
+print(h_sin_rep)
+
+h_con_rep = combinations(n = 5, r = 3, v = c("x", "y", "z", "w", "q"), repeats.allowed = TRUE)
+cat("h) Con repetición:\n")
+print(h_con_rep)
+```
+
+---------------------
+
+### **5. Considere un problema de un repartidor que debe entregar paquetes en 40 casas y volver al origen sin pasar dos veces por la misma casa.**
+
+#### **a) ¿Cuál es la probabilidad de que elija la ruta más corta? ¿Y la más larga?**
+
+Para un repartidor que debe entregar paquetes en 40 casas, el número de rutas posibles sin repetir ninguna casa es simplemente **40!**. 
+
+Dado que hay una única ruta más corta y una única ruta más larga, la probabilidad de elegir cualquiera de estas rutas al azar es:
+
+\[ P(\text{ruta más corta o más larga}) = \frac{1}{40!} \]
+
+#### **b) Si elige una ruta al azar que es distinta a la anterior, ¿cuál es la probabilidad de que sea la ruta más corta?**
+
+Si ya ha elegido una ruta, y ahora elige otra al azar, el número total de rutas posibles ahora es **40! - 1**, ya que hay una ruta menos para considerar (la ruta que ya eligió anteriormente). Sin embargo, aún hay una única ruta más corta, por lo que la probabilidad de elegir la ruta más corta en esta segunda elección es:
+
+\[ P(\text{ruta más corta en segunda elección}) = \frac{1}{40! - 1} \]
+
+
+**ADVERTENCIA**: *"Las funciones `combinations` y `permutations` podrían no funcionar para este problema"* 
+
+Debido al tamaño extremadamente grande de los cálculos. El valor de **40!** es un número muy grande y calcular todas las permutaciones posibles de 40 elementos puede no ser práctico y consumiría una cantidad muy grande de memoria. Además para este tipo de problemas no es necesario generar todas las permutaciones o combinaciones explícitamente. En lugar de eso, se usaron fórmulas matemáticas para calcular las probabilidades.
+
+-------------------
+
+### **6. Un restaurante tiene 4 camareros que deben atender a los clientes. Ana atiende al 20 % de los clientes y olvida 1 de cada 15 órdenes; Bob atiende al 50 % de los clientes y olvida 1 de cada 8 órdenes; Carlos atiende al 20 % de los clientes y olvida 1 de cada 12 órdenes; Diana atiende al 10 % de los clientes y olvida 2 de cada 7 órdenes.**
+
+#### **a) (5 puntos) Formule la ecuación para resolver este problema.**
+
+
+
+Para resolver las preguntas usaré el Teorema de Bayes, primero definiré unos eventos:
+
+Eventos:
+
+- \( A \): El cliente es atendido por Ana.
+- \( B \): El cliente es atendido por Bob.
+- \( C \): El cliente es atendido por Carlos.
+- \( D \): El cliente es atendido por Diana.
+- \( O \): El cliente tiene una orden olvidada.
+- \( \neg O \): El cliente no tiene una orden olvidada.
+
+Probabilidades dadas:
+
+```{r , eval=TRUE}
+P_A = 0.20
+P_B = 0.50
+P_C = 0.20
+P_D = 0.10
+
+P_O_dado_A = 1/15
+P_O_dado_B = 1/8
+P_O_dado_C = 1/12
+P_O_dado_D = 2/7
+```
+
+A partir de las probabilidades dadas, podemos calcular las probabilidades complementarias de que no se olvide una orden dado un camarero:
+
+```{r , eval=TRUE}
+P_not_O_dado_A = 1 - P_O_dado_A
+P_not_O_dado_B = 1 - P_O_dado_B
+P_not_O_dado_C = 1 - P_O_dado_C
+P_not_O_dado_D = 1 - P_O_dado_D
+```
+
+La probabilidad total de que un cliente no tenga una orden olvidada, considerando todos los camareros, es:
+
+```{r , eval=TRUE}
+P_not_O = P_A * P_not_O_dado_A + P_B * P_not_O_dado_B + P_C * P_not_O_dado_C + P_D * P_not_O_dado_D
+```
+
+Luego, una fórmula para la probabilidad de que un cliente haya sido atendido por `< camarero >` dado que su orden **no** fue olvidada es:
+
+\[ P(Camarero|\neg O) = \frac{P(\neg O|Camarero) \times P(Camarero)}{P(\neg O)} \]
+
+
+#### **b) (5 puntos) ¿Cuál es la probabilidad de que el cliente haya sido atendido por Carlos?**
+
+Usando el Teorema de Bayes:
+
+```{r , eval=TRUE}
+# Probabilidad de que el cliente haya sido atendido por Carlos dado que no se olvidó su orden
+P_C_dado_not_O = (P_not_O_dado_C * P_C) / P_not_O
+cat("b) P(C|not O):", P_C_dado_not_O, "\n")
+```
+
+#### **c) (5 puntos) ¿Cuál es la probabilidad de que el cliente haya sido atendido por Ana o Diana?**
+
+```{r , eval=TRUE}
+# Probabilidad de que el cliente haya sido atendido por Ana o Diana dado que no se olvidó su orden
+P_A_dado_not_O = (P_not_O_dado_A * P_A) / P_not_O
+P_D_dado_not_O = (P_not_O_dado_D * P_D) / P_not_O
+P_A_or_D_dado_not_O = P_A_dado_not_O + P_D_dado_not_O
+cat("c) P(A or D|not O):", P_A_or_D_dado_not_O, "\n")
+```
+
+#### **d) (5 puntos) Calcule la probabilidad de que el cliente haya sido atendido por cualquiera de los camareros. ¿Qué observa?**
+
+Dado que uno de los camareros definitivamente atendió al cliente, la suma de las probabilidades de que el cliente haya sido atendido por cualquier camarero, independientemente de si se olvidó la orden o no, es:
+
+```{r , eval=TRUE}
+P_cualquier_camarero = P_A + P_B + P_C + P_D
+cat("d) P(cualquier camarero):", P_cualquier_camarero, "\n") # Esto debe ser 1
+```
+
+----------------
+
+### **7. (10 puntos) De un grupo de 35 personas, se quiere conocer la opinión de 4 personas (elegidas al azar) sobre la legalización de la marihuana. Si se sabe que 18 personas están a favor y 17 en contra, ¿cuál es la probabilidad de que las 4 personas seleccionadas estén en contra?**
+
+Dado que hay 17 personas en contra, la probabilidad de seleccionar la primera persona en contra es \( \frac{17}{35} \). Después de seleccionar una persona en contra, quedan 16 en contra de un total de 34 personas, por lo que la probabilidad de seleccionar la segunda persona en contra es \( \frac{16}{34} \), y así sucesivamente.
+
+La probabilidad de que las 4 personas seleccionadas estén en contra es:
+
+\[ P(\text{4 en contra}) = \frac{17}{35} \times \frac{16}{34} \times \frac{15}{33} \times \frac{14}{32} \]
+
+
+
+```{r , eval=TRUE}
+prob_4_contra = (17/35) * (16/34) * (15/33) * (14/32)
+prob_4_contra
+```
+
+------------------
+
