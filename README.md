@@ -4,12 +4,12 @@
 
 Dentro de este repositorio, encontrarás las siguientes tareas:
 
-- Tarea 1: [Tarea 1](link-a-tarea-1)
-- Tarea 2: [Tarea 2](link-a-tarea-2)
-- Tarea 3: [Tarea 3](link-a-tarea-3)
-- Tarea 4: [Tarea 4](link-a-tarea-4)
-- Tarea 5: [Tarea 5](link-a-tarea-5)
-- Tarea 6: [Tarea 6](link-a-tarea-6)
+- Tarea 1: [Tarea 1](https://github.com/ByronCaices/Estadistica-Computacional/tree/main/ej1)
+- Tarea 2: [Tarea 2](https://github.com/ByronCaices/Estadistica-Computacional/tree/main/ej2)
+- Tarea 3: [Tarea 3](https://github.com/ByronCaices/Estadistica-Computacional/tree/main/ej3)
+- Tarea 4: [Tarea 4](https://github.com/ByronCaices/Estadistica-Computacional/tree/main/ej4)
+- Tarea 5: [Tarea 5](https://github.com/ByronCaices/Estadistica-Computacional/tree/main/ej5)
+- Tarea 6: [Tarea 6](https://github.com/ByronCaices/Estadistica-Computacional/tree/main/ej6)
 
 ## 📈 Calificaciones
 
