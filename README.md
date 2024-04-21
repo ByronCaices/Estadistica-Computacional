@@ -13,8 +13,6 @@ Dentro de este repositorio, encontrarás las siguientes tareas:
 
 ## 📈 Calificaciones
 
-He aquí un resumen visual de las calificaciones obtenidas en cada tarea:
-
 | Tarea  | Calificación |
 | ------ | ------------ |
 | Tarea 1 | 7.0 🌟       |
@@ -23,8 +21,6 @@ He aquí un resumen visual de las calificaciones obtenidas en cada tarea:
 | Tarea 4 | 6.8 🌟       |
 | Tarea 5 | 7.0 🌟       |
 | Tarea 6 | 7.0 🌟       |
-
-¡Estoy muy orgulloso de estos logros y espero que encuentres los materiales útiles e interesantes!
 
 ## 🛠️ Cómo usar
 
@@ -41,7 +37,7 @@ git clone https://github.com/ByronCaices/Estadistica-Computacional
 
 ## 📩 Contacto
 
-Si tienes alguna pregunta o comentario, no dudes en abrir un issue o contactarme directamente.
+Si tienes alguna pregunta o comentario, no dudes en contactarme directamente.
 
 📧 [byron.caices@usach.cl](mailto:byron.caices@usach.cl)
 ---
